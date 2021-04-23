@@ -1,0 +1,31 @@
+#include <main.h>
+# use fast_io(a)
+#include <LCD.c>
+
+#define USE_PORTB_LCD TRUE
+
+int16 valor=0;
+void main()
+{
+   LCD_INIT();
+   LCD_PUTC("\f");
+   set_tris_a(0b00000001);
+   
+   setup_adc_ports(ALL_ANALOG);
+   setup_adc(ADC_CLOCK_INTERNAL);
+   set_adc_channel(0);
+   
+   setup_timer_2(T2_DIV_BY_16,255,1);
+   setup_ccp3(ccp_pwm);
+   
+   while(TRUE)
+   {
+     valor=read_adc();
+     set_pwm3_duty(valor);
+     
+     LCD_GOTOXY(1,1);
+     printf(lcd_putc,"Valor %i",valor);
+     delay_ms(20);
+   }
+
+}

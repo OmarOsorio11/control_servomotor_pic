@@ -1,0 +1,26 @@
+#include <main.h>
+#use standard_io(a)
+#include <LCD.c>
+
+int16 valor=0;
+double ang=0.0;
+void main()
+{
+   LCD_INIT();
+   LCD_PUTC("Hola");
+   set_tris_a(0b00000001);
+   setup_adc_ports(sAN0);
+   setup_adc(ADC_CLOCK_INTERNAL);
+   set_adc_channel(0);
+   setup_timer_2(T2_DIV_BY_16,255,1);
+   setup_ccp3(ccp_pwm);
+   while(TRUE)
+   {
+     valor=read_adc();
+     set_pwm3_duty(valor);
+     ang=valor*180/1023;
+     LCD_GOTOXY(1,1);
+     printf(lcd_putc,"Valor");
+     delay_ms(20);
+   }
+}
